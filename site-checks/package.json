@@ -1,0 +1,8 @@
+{
+  "name": "holdem-trainer-site-checks",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "1.49.1"
+  }
+}
