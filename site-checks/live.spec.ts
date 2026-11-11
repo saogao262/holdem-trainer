@@ -41,7 +41,12 @@ test("Play deals a hand and offers your move", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("holdem-trainer-splash-seen-v1", "1"));
   await page.goto("./#play");
   await expect(page.locator(".seat")).toHaveCount(6);
-  await expect(page.locator(".action-bar .action").first()).toBeVisible({ timeout: 30_000 });
+  // If everyone folds to your big blind, the hand ends without a move for you, so deal the next one.
+  const nextHand = page.getByRole("button", { name: "Next hand" });
+  await expect(async () => {
+    if (await nextHand.isVisible()) await nextHand.click();
+    await expect(page.locator(".action-bar .action").first()).toBeVisible({ timeout: 3_000 });
+  }).toPass({ timeout: 60_000 });
   expect(errors).toEqual([]);
 });
 
