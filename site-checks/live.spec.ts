@@ -40,6 +40,8 @@ test("Play deals a hand and offers your move", async ({ page }) => {
   const errors = watchForErrors(page);
   await page.addInitScript(() => sessionStorage.setItem("holdem-trainer-splash-seen-v1", "1"));
   await page.goto("./#play");
+  // A first visit to Play asks which table: pick the cash table.
+  await page.getByRole("button", { name: "Play cash" }).click();
   await expect(page.locator(".seat")).toHaveCount(6);
   // If everyone folds to your big blind, the hand ends without a move for you, so deal the next one.
   const nextHand = page.getByRole("button", { name: "Next hand" });
